@@ -3,7 +3,7 @@ package com.eazybytes.accounts.dto;
 import lombok.Data;
 
 @Data
-public class AccoutsDTO {
+public class AccountsDTO {
 
     private Long accountNumber;
 
