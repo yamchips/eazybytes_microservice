@@ -14,6 +14,7 @@ import com.eazybytes.accounts.repository.CustomerRepository;
 import com.eazybytes.accounts.service.IAccountsService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -91,6 +92,22 @@ public class AccountsServiceImpl implements IAccountsService {
             isUpdated = true;
         }
         return isUpdated;
+    }
+
+    /**
+     * This method will delete both account and customer given the mobile number
+     *
+     * @param mobileNumber input mobile number
+     * @return boolean indicating whether the deletion is successful or not
+     */
+    @Override
+    @Transactional
+    public boolean deleteAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+        accountsRepository.deleteByCustomerId(customer.getCustomerId());
+        customerRepository.deleteById(customer.getCustomerId());
+        return true;
     }
 
 
